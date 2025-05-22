@@ -16,7 +16,7 @@ def prune(hanzi, phrase, readings):
     if len(readings) <= 1:
         return readings
 
-    prompt_1 = f'漢字「{hanzi}」是一個多音字，有以下讀音：{readings}。大多數情形下，多音字在一個短語中只有一個合適的讀音，但少數情形下可能會有多個讀音。請好好思考一下，從 {readings} 中選擇「{hanzi}」在短語「{phrase}」中可能的拼音。寫下你的推理過程。'
+    prompt_1 = f'漢字「{hanzi}」是一個多音字，有以下讀音：{readings}。大多數情形下，多音字在一個短語中只有一個合適的讀音，但少數情形下可能會有多個讀音。請好好思考一下，在短語「{phrase}」中選擇被方括號括起來的漢字「{hanzi}」可能的拼音。寫下你的推理過程。'
 
     prompt_2 = f'使用 JSON 格式總結你的回答。請用 `results` 代表你選擇的「{hanzi}」的拼音，不要加註音調；用 `reason` 代表你這樣選擇的理由。'
 
@@ -52,14 +52,21 @@ def prune(hanzi, phrase, readings):
 
 
 def annotate_phrase(phrase, file_out):
-    all_phrase_readings = pinyin(phrase, heteronym=True, style=Style.NORMAL, errors='exception')
+    all_phrase_readings = pinyin(
+        phrase, heteronym=True, style=Style.NORMAL, errors='exception'
+    )
     pruned_phrase_readings = []
 
     for i, hanzi in enumerate(phrase):
-        pruned_readings = prune(hanzi, phrase, all_phrase_readings[i])
+        phrase_with_brackets = phrase[:i] + f'[{hanzi}]' + phrase[i+1:]
+        pruned_readings = prune(
+            hanzi, phrase_with_brackets, all_phrase_readings[i]
+        )
         pruned_phrase_readings.append(pruned_readings)
 
-    joined_phrase_readings = sorted([' '.join(x) for x in itertools.product(*pruned_phrase_readings)])
+    joined_phrase_readings = sorted(
+        [' '.join(x) for x in itertools.product(*pruned_phrase_readings)]
+    )
     for reading in joined_phrase_readings:
         logging.info(f'{phrase}\t{reading}')
         print(f'{phrase}\t{reading}', file=file_out)
