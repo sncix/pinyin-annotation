@@ -31,6 +31,9 @@ def prune(hanzi, phrase, readings):
     )
 
     logging.info(response_1.message.content)
+    logging.info(
+        f'prompt_eval_count={response_1.prompt_eval_count} eval_count={response_1.eval_count}'
+    )
 
     messages += [
         {'role': 'assistant', 'content': response_1.message.content},
@@ -47,6 +50,9 @@ def prune(hanzi, phrase, readings):
     validated_response = Response.model_validate_json(response_2.message.content)
 
     logging.info(validated_response)
+    logging.info(
+        f'prompt_eval_count={response_2.prompt_eval_count} eval_count={response_2.eval_count}'
+    )
 
     return validated_response.results
 
