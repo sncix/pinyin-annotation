@@ -1,3 +1,4 @@
+import argparse
 import itertools
 import logging
 from typing import Annotated
@@ -89,9 +90,22 @@ def main():
     annotate_phrase(phrase, sys.stdout)
 
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--hanzi_tag', required=True, help='hanzi tag, e.g. \'樂\'')
+    parser.add_argument('--model_name', required=True, help='model name, e.g. \'deepseek-r1:7b\'')
+    args = parser.parse_args()
+
+    return args
+
+
 if '__main__' == __name__:
-    hanzi_tag = '樂'
-    model_name = 'deepseek-r1:7b'
+    args = parse_args()
+
+    hanzi_tag = args.hanzi_tag
+    model_name = args.model_name
+    # hanzi_tag = '樂'
+    # model_name = 'deepseek-r1:7b'
     model_tag = model_name.replace(':', '_').replace('.', 'p')
     tag = f'{hanzi_tag}_{model_tag}'
 
