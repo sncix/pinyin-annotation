@@ -31,8 +31,8 @@ def prune(hanzi, phrase, readings):
         options=dict(num_ctx=4096, num_predict=3584, seed=10)
     )
 
-    logging.info(response_1.message.content)
-    logging.info(
+    logger.info(response_1.message.content)
+    logger.info(
         f'prompt_eval_count={response_1.prompt_eval_count} eval_count={response_1.eval_count}'
     )
 
@@ -50,8 +50,8 @@ def prune(hanzi, phrase, readings):
 
     validated_response = Response.model_validate_json(response_2.message.content)
 
-    logging.info(validated_response)
-    logging.info(
+    logger.info(validated_response)
+    logger.info(
         f'prompt_eval_count={response_2.prompt_eval_count} eval_count={response_2.eval_count}'
     )
 
@@ -75,7 +75,7 @@ def annotate_phrase(phrase, file_out):
         [' '.join(x) for x in itertools.product(*pruned_phrase_readings)]
     )
     for reading in joined_phrase_readings:
-        logging.info(f'{phrase}\t{reading}')
+        logger.info(f'{phrase}\t{reading}')
         print(f'{phrase}\t{reading}', file=file_out)
 
 
@@ -116,6 +116,7 @@ if '__main__' == __name__:
         level=logging.INFO
     )
     logging.getLogger('httpx').propagate = False
-    # logging.getLogger().addHandler(logging.StreamHandler())
+
+    logger = logging.getLogger(__name__)
 
     main()
