@@ -79,6 +79,15 @@ def annotate_phrase(phrase, file_out):
         print(f'{phrase}\t{reading}', file=file_out)
 
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--hanzi_tag', required=True, help='hanzi tag, e.g. \'樂\'')
+    parser.add_argument('--model_name', required=True, help='model name, e.g. \'deepseek-r1:7b\'')
+    args = parser.parse_args()
+
+    return args
+
+
 def main():
     # with open(f'luna_{hanzi_tag}.txt', 'r') as file_in, open(f'results_luna_{tag}.txt', 'a', buffering=1) as file_out:
     #    for line in file_in:
@@ -88,15 +97,6 @@ def main():
     import sys
     phrase = '可口可樂公司'
     annotate_phrase(phrase, sys.stdout)
-
-
-def parse_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--hanzi_tag', required=True, help='hanzi tag, e.g. \'樂\'')
-    parser.add_argument('--model_name', required=True, help='model name, e.g. \'deepseek-r1:7b\'')
-    args = parser.parse_args()
-
-    return args
 
 
 if '__main__' == __name__:
