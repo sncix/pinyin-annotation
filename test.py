@@ -48,6 +48,12 @@ def prune(hanzi, phrase, readings):
         options=dict(num_ctx=4096, seed=10)
     )
 
+    # Check for incomplete response from Ollama
+    # Usually that means premature termination due to repeated tokens
+    if not response_2.done:
+        logger.info(response_2)
+        return []
+
     validated_response = Response.model_validate_json(response_2.message.content)
 
     logger.info(validated_response)
