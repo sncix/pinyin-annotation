@@ -112,7 +112,9 @@ if '__main__' == __name__:
     model_name = args.model_name
     # hanzi_tag = '樂'
     # model_name = 'deepseek-r1:7b'
-    model_tag = model_name.replace(':', '_').replace('.', 'p')
+    model_tag = model_name.translate(
+        str.maketrans({'/': '_', ':': '_', '.': 'p'})
+    )
     tag = f'{hanzi_tag}_{model_tag}'
 
     logging.basicConfig(
