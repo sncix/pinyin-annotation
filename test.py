@@ -95,14 +95,17 @@ def parse_args():
 
 
 def main():
-    # with open(f'luna_{hanzi_tag}.txt', 'r') as file_in, open(f'results_luna_{tag}.txt', 'a', buffering=1) as file_out:
-    #    for line in file_in:
-    #        phrase = line.strip()
-    #        annotate_phrase(phrase, file_out=file_out)
+    file_in_path = f'luna_{hanzi_tag}.txt'
+    file_out_path = f'results_luna_{tag}.txt'
 
-    import sys
-    phrase = '可口可樂公司'
-    annotate_phrase(phrase, sys.stdout)
+    with open(file_in_path) as file_in, open(file_out_path, mode='a', buffering=1) as file_out:
+       for line in file_in:
+           phrase = line.strip()
+           annotate_phrase(phrase, file_out=file_out)
+
+    # import sys
+    # phrase = '可口可樂公司'
+    # annotate_phrase(phrase, sys.stdout)
 
 
 if '__main__' == __name__:
