@@ -4,7 +4,7 @@ import logging
 from typing import Annotated
 
 from ollama import chat
-from pydantic import BaseModel, StringConstraints, conset
+from pydantic import BaseModel, StringConstraints, ValidationError, conset
 from pypinyin import Style, pinyin
 
 
@@ -54,7 +54,11 @@ def prune(hanzi, phrase, readings):
         logger.info(response_2)
         return []
 
-    validated_response = Response.model_validate_json(response_2.message.content)
+    try:
+        validated_response = Response.model_validate_json(response_2.message.content)
+    except ValidationError:
+        logger.info(response_2)
+        return []
 
     logger.info(validated_response)
     logger.info(
